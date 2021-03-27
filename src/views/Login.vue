@@ -32,10 +32,11 @@ export default {
   methods: {
     async onSubmit() {
       const res = await this.$api.login.login(this.form);
-      if (res.code === 1) {
+      if (res.code === 0) {
         this.$message.success(res.message);
         sessionStorage.setItem("isLogin", true);
-        this.$router.push("/home/task");
+        sessionStorage.setItem("userId", res.data.id);
+        this.$router.push("/home");
       } else this.$message.error(res.message);
     },
     toRegister() {

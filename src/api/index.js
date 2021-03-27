@@ -1,8 +1,9 @@
-import course from './course'
-import workloadTotal from './workloadTotal'
+import user from './user'
+import dictionary from './dictionary'
 import login from './login'
-import teacher from './teacher'
-import task from './task'
+import notice from './notice'
+import subject from './subject'
+import knowledge from './knowledge'
 export default {
-    course,workloadTotal,login,teacher,task
+    user,dictionary,login,notice,subject,knowledge
 };

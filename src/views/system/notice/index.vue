@@ -8,8 +8,8 @@
         label-width="100px"
         label-position="left"
       >
-        <el-form-item label="公告名称：">
-          <el-input v-model="searchForm.name"></el-input>
+        <el-form-item label="公告标题：">
+          <el-input v-model="searchForm.title"></el-input>
         </el-form-item>
         <el-button type="primary" class="search" @click="handleSearch"
           >查询</el-button
@@ -19,24 +19,32 @@
           type="primary"
           class="add"
           plain
-          @click="openDialog({ title: '新增课程' })"
-          >新增科目</el-button
+          @click="
+            openDialog({ title: '新增公告' });
+            isAdd = true;
+            subData = {};
+          "
+          >新增公告</el-button
         >
       </el-form>
     </div>
     <div class="table">
       <el-table :data="tableData" style="width: 100%" border>
-        <el-table-column prop="name" label="课程名称" align="center">
+        <el-table-column prop="title" label="公告标题" align="center">
         </el-table-column>
-        <el-table-column prop="category" label="课程类别" align="center">
+        <el-table-column prop="createTime" label="创建时间" align="center">
           <template slot-scope="scope">
-            <span>{{ categoryMap[scope.row.category] }}</span>
+            <span>
+              {{ scope.row.createTime | dateFormat }}
+            </span>
           </template>
         </el-table-column>
-        <el-table-column prop="type" label="课程类型" align="center">
+        <el-table-column prop="updateTime" label="修改时间" align="center">
           <template slot-scope="scope">
-            <span>{{ typeMap[scope.row.type] }}</span> </template
-          >type
+            <span>
+              {{ scope.row.updateTime | dateFormat }}
+            </span>
+          </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
@@ -70,7 +78,13 @@
       width="50%"
       top="50px"
     >
-      <Info @onSubmit="handleSubmit" @hanldeCancel="hanldeCancel" />
+      <Info
+        @onSubmit="handleSubmit"
+        @hanldeCancel="hanldeCancel"
+        @onEdit="handleEdit"
+        :subData="subData"
+        :isAdd="isAdd"
+      />
     </el-dialog>
   </div>
 </template>
@@ -87,35 +101,69 @@ export default {
       searchForm: {},
       subData: {},
       tableData: [],
-      categoryMap: {
-        theory: "理论课",
-        practice: "实践课",
-      },
-      typeMap: {
-        compulsory: "公共必修课",
-        elective: "公共选修课",
-        major: "专业课",
-      },
+      isAdd: "",
     };
   },
-  created() {},
+  created() {
+    this.loadData();
+  },
+  filters: {
+    dateFormat(value) {
+      let date = new Date(value);
+      let y = date.getFullYear();
+      let MM = date.getMonth() + 1;
+      MM = MM < 10 ? "0" + MM : MM;
+      let d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      let h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      let m = date.getMinutes();
+      m = m < 10 ? "0" + m : m;
+      let s = date.getSeconds();
+      s = s < 10 ? "0" + s : s;
+      return y + "-" + MM + "-" + d + " " + h + ":" + m;
+    },
+  },
   methods: {
     async loadData(isSearch) {
       isSearch && (this.defaultParams.page = 1);
-      const res = await this.$api.course.list(
+      const res = await this.$api.notice.list(
         Object.assign({}, this.searchForm, this.defaultParams)
       );
-      if (res.code == 1) {
+      if (res.code == 0) {
         this.total = res.data.total;
         this.tableData = res.data.records;
       }
     },
     toEdit(row) {
+      this.isAdd = false;
       this.subData = row;
-      this.openDialog({ title: "编辑课程" });
+      this.openDialog({ title: "编辑公告" });
     },
     // 弹出框确认回调
-    async handleSubmit(params) {},
+    async handleSubmit(params) {
+      this.$api.notice.add(params).then((res) => {
+        if (res.code == 0) {
+          this.$message.success(res.message);
+          this.loadData();
+          this.closeDialog();
+        } else {
+          this.$message.error(res.message);
+        }
+      });
+    },
+    // 弹出框确认回调
+    async handleEdit(params) {
+      this.$api.notice.edit(params).then((res) => {
+        if (res.code == 0) {
+          this.$message.success(res.message);
+          this.loadData();
+          this.closeDialog();
+        } else {
+          this.$message.error(res.message);
+        }
+      });
+    },
     hanldeCancel() {
       this.closeDialog();
     },
@@ -123,13 +171,22 @@ export default {
       this.loadData(true);
     },
     handleDelete(row) {
-      this.$confirm("确认删除该课程吗", "确认信息", {
+      this.$confirm("确认删除该公告吗", "确认信息", {
         distinguishCancelAndClose: true,
         confirmButtonText: "确认删除",
         cancelButtonText: "取消",
       })
         .then(async () => {
           // 删除确认回调
+          this.$api.notice.delete(row).then((res) => {
+            if (res.code == 0) {
+              this.$message.success(res.message);
+              this.loadData();
+              this.closeDialog();
+            } else {
+              this.$message.error(res.message);
+            }
+          });
         })
         .catch((action) => {
           // 取消确认回调

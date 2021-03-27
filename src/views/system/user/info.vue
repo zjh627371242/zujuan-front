@@ -45,7 +45,7 @@ export default {
     };
   },
   created(){
-    this.form = this.subData
+    this.form =  JSON.parse(JSON.stringify(this.subData)) 
   },
   //方法集合
   methods: {

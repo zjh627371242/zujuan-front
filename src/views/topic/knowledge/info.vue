@@ -1,8 +1,13 @@
 <template>
   <div class="wrapper">
     <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="科目名称">
-        <el-input v-model="form.name"></el-input>
+      <el-form-item label="知识点名称">
+        <el-input v-model="form.point"></el-input>
+      </el-form-item>
+      <el-form-item label="所属科目名称">
+        <el-select v-model="form.subjectId">
+          <el-option v-for="item in subjectList" :value="item.id" :key="item.id" :label="item.title"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit('form')" v-if="isAdd">立即创建</el-button>
@@ -29,16 +34,25 @@ export default {
     }
   },
   created(){
-    this.form = this.subData
+    this.loadSubjectList();
+    this.form = JSON.parse(JSON.stringify(this.subData)) 
   },
   data() {
     //这里存放数据
     return {
       form: {},
+      subjectList:[]
     };
   },
   //方法集合
   methods: {
+    loadSubjectList(){
+      this.$api.subject.all().then((res) => {
+        if (res.code == 0) {
+          this.subjectList = res.data;
+        } 
+      });
+    },
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {

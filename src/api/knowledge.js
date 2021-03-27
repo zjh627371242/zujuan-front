@@ -12,5 +12,8 @@ export default {
     },
     edit(params){
         return http.post('/knowledge/edit',params)
+    },
+    all(params){
+        return http.post('/knowledge/all',params)
     }
 };

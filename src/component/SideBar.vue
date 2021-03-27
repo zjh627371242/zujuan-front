@@ -9,8 +9,8 @@
         <el-menu-item-group>
           <el-menu-item index="/home/subject">科目管理</el-menu-item>
           <el-menu-item index="/home/knowledge">知识点管理</el-menu-item>
-          <el-menu-item index="/home/question">题型管理</el-menu-item>
-          <el-menu-item index="/home/testPaper">试卷管理</el-menu-item>
+          <el-menu-item index="/home/questionType">题型管理</el-menu-item>
+          <el-menu-item index="/home/question">试题管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">

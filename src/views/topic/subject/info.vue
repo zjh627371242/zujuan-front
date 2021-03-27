@@ -29,7 +29,7 @@ export default {
     }
   },
   created(){
-    this.form = this.subData
+    this.form =  JSON.parse(JSON.stringify(this.subData)) 
   },
   data() {
     //这里存放数据

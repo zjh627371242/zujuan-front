@@ -5,8 +5,8 @@ import Login from "../views/Login.vue";
 
 // 题库管理
 import Subject from "../views/topic/subject";
-import TestPaper from "../views/topic/testPaper";
-import Question from "../views/topic/questionType";
+import Question from "../views/topic/question";
+import QuestionType from "../views/topic/questionType";
 import Knowledge from "../views/topic/knowledge";
 
 // 系统管理
@@ -41,9 +41,9 @@ const routes = [
         component: Question,
       },
       {
-        path: "/home/testpaper",
-        name: "TestPaper",
-        component: TestPaper,
+        path: "/home/questionType",
+        name: "QuestionType",
+        component: QuestionType,
       },
       {
         path: "/home/knowledge",

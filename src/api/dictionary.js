@@ -15,5 +15,8 @@ export default {
     },
     edit(params){
         return http.post('/dictionary/edit',params)
+    },
+    getByCode(params){
+        return http.post('/dictionary/getByCode',params)
     }
 };

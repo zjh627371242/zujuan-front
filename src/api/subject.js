@@ -12,5 +12,8 @@ export default {
     },
     edit(params){
         return http.post('/subject/edit',params)
+    },
+    all(params){
+        return http.post('/subject/all',params)
     }
 };

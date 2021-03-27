@@ -8,8 +8,8 @@
         label-width="100px"
         label-position="left"
       >
-        <el-form-item label="试卷名称：">
-          <el-input v-model="searchForm.name"></el-input>
+        <el-form-item label="知识点：">
+          <el-input v-model="searchForm.point"></el-input>
         </el-form-item>
         <el-button type="primary" class="search" @click="handleSearch"
           >查询</el-button
@@ -19,24 +19,23 @@
           type="primary"
           class="add"
           plain
-          @click="openDialog({ title: '新增课程' })"
-          >新增科目</el-button
+          @click="openDialog({ title: '新增试题' });isAdd = true;
+            subData = {};"
+          >新增试题</el-button
         >
       </el-form>
     </div>
     <div class="table">
       <el-table :data="tableData" style="width: 100%" border>
-        <el-table-column prop="name" label="课程名称" align="center">
+        <el-table-column prop="knowledge.subject.title" label="科目名称" align="center">
         </el-table-column>
-        <el-table-column prop="category" label="课程类别" align="center">
-          <template slot-scope="scope">
-            <span>{{ categoryMap[scope.row.category] }}</span>
-          </template>
+        <el-table-column prop="knowledge.point" label="知识点" align="center">
         </el-table-column>
-        <el-table-column prop="type" label="课程类型" align="center">
-          <template slot-scope="scope">
-            <span>{{ typeMap[scope.row.type] }}</span> </template
-          >type
+        <el-table-column prop="questionEngine.typeName" label="题目类型" align="center">
+        </el-table-column>
+        <el-table-column prop="levelName" label="难度" align="center">
+        </el-table-column>
+        <el-table-column prop="content" label="试题内容" align="center">
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
@@ -70,7 +69,13 @@
       width="50%"
       top="50px"
     >
-      <Info @onSubmit="handleSubmit" @hanldeCancel="hanldeCancel" />
+      <Info
+        @onSubmit="handleSubmit"
+        @hanldeCancel="hanldeCancel"
+        @onEdit="handleEdit"
+        :subData="subData"
+        :isAdd="isAdd"
+      />
     </el-dialog>
   </div>
 </template>
@@ -84,38 +89,57 @@ export default {
   components: { Info },
   data() {
     return {
+      isAdd:'',
       searchForm: {},
       subData: {},
       tableData: [],
-      categoryMap: {
-        theory: "理论课",
-        practice: "实践课",
-      },
-      typeMap: {
-        compulsory: "公共必修课",
-        elective: "公共选修课",
-        major: "专业课",
-      },
+      
     };
   },
-  created() {},
+  created() {
+    this.loadData()
+  },
   methods: {
+    
     async loadData(isSearch) {
       isSearch && (this.defaultParams.page = 1);
-      const res = await this.$api.course.list(
+      const res = await this.$api.question.list(
         Object.assign({}, this.searchForm, this.defaultParams)
       );
-      if (res.code == 1) {
+      if (res.code == 0) {
         this.total = res.data.total;
         this.tableData = res.data.records;
       }
     },
     toEdit(row) {
+      this.isAdd = false;
       this.subData = row;
       this.openDialog({ title: "编辑课程" });
     },
     // 弹出框确认回调
-    async handleSubmit(params) {},
+    async handleSubmit(params) {
+      this.$api.question.add(params).then((res) => {
+        if (res.code == 0) {
+          this.$message.success(res.message);
+          this.loadData();
+          this.closeDialog();
+        } else {
+          this.$message.error(res.message);
+        }
+      });
+    },
+    // 弹出框确认回调
+    async handleEdit(params) {
+      this.$api.question.edit(params).then((res) => {
+        if (res.code == 0) {
+          this.$message.success(res.message);
+          this.loadData();
+          this.closeDialog();
+        } else {
+          this.$message.error(res.message);
+        }
+      });
+    },
     hanldeCancel() {
       this.closeDialog();
     },
@@ -130,6 +154,15 @@ export default {
       })
         .then(async () => {
           // 删除确认回调
+          this.$api.question.delete(row).then((res) => {
+            if (res.code == 0) {
+              this.$message.success(res.message);
+              this.loadData();
+              this.closeDialog();
+            } else {
+              this.$message.error(res.message);
+            }
+          });
         })
         .catch((action) => {
           // 取消确认回调

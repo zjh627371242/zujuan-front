@@ -1,11 +1,12 @@
 import axios from "axios";
 import router from "../router";
 import { Message } from "element-ui";
+import {ip} from "./config"
 import qs from "qs";
 
 //1. 创建新的axios实例，
 const service = axios.create({
-    baseURL: 'http://127.0.0.1:8082',
+    baseURL: ip,
     timeout: 60 * 1000
 })
 

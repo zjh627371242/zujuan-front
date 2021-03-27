@@ -23,6 +23,13 @@
             subData = {};"
           >新增试题</el-button
         >
+        <el-button
+          type="primary"
+          class="add"
+          plain
+          @click="download()"
+          >打印试题</el-button
+        >
       </el-form>
     </div>
     <div class="table">
@@ -83,6 +90,7 @@
 <script>
 import tableMixin from "@/mixins/tableMixin";
 import dialogMixin from "@/mixins/dialogMixin";
+import {ip} from "@/utils/config"
 import Info from "./info";
 export default {
   mixins: [tableMixin, dialogMixin],
@@ -100,7 +108,9 @@ export default {
     this.loadData()
   },
   methods: {
-    
+    download(){
+      window.open(ip+'/question/excel')
+    },
     async loadData(isSearch) {
       isSearch && (this.defaultParams.page = 1);
       const res = await this.$api.question.list(

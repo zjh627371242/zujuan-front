@@ -15,5 +15,8 @@ export default {
     },
     edit(params){
         return http.post('/question/edit',params)
+    },
+    excel(params){
+        return http.get('/question/excel',params)
     }
 };

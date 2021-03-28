@@ -12,8 +12,9 @@
       </el-form-item>
       <el-form-item label="角色">
         <el-select v-model="form.level">
-          <el-option value="admin" label="管理员"></el-option>
-          <el-option value="teacher" label="教师"></el-option>
+          <el-option value="admin" label="管理员" v-if="role=='admin'"></el-option>
+          <el-option value="teacher" label="教师" v-if="role=='admin'"></el-option>
+          <el-option value="inputPeople" label="试题录入员" v-if="role=='admin' || role=='teacher'"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -41,10 +42,12 @@ export default {
   data() {
     //这里存放数据
     return {
+      role:'',
       form: {},
     };
   },
   created(){
+    this.role = sessionStorage.getItem("role");
     this.form =  JSON.parse(JSON.stringify(this.subData)) 
   },
   //方法集合

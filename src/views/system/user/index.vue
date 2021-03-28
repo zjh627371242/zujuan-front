@@ -87,7 +87,8 @@ export default {
       tableData: [],
       levelMap: {
         admin: "管理员",
-        teacher: "教师"
+        teacher: "教师",
+        inputPeople:"试题录入员"
       },
       isAdd:''
     };
@@ -97,6 +98,7 @@ export default {
   },
   methods: {
     async loadData(isSearch) {
+      this.searchForm.role = sessionStorage.getItem("role");
       isSearch && (this.defaultParams.page = 1);
       const res = await this.$api.user.list(
         Object.assign({}, this.searchForm, this.defaultParams)

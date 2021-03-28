@@ -11,6 +11,9 @@
         <el-form-item label="知识点：">
           <el-input v-model="searchForm.point"></el-input>
         </el-form-item>
+        <el-form-item label="科目名称：">
+          <el-input v-model="searchForm.title"></el-input>
+        </el-form-item>
         <el-button type="primary" class="search" @click="handleSearch"
           >查询</el-button
         >
@@ -98,7 +101,9 @@ export default {
   data() {
     return {
       isAdd:'',
-      searchForm: {},
+      searchForm: {
+
+      },
       subData: {},
       tableData: [],
       
@@ -109,7 +114,7 @@ export default {
   },
   methods: {
     download(){
-      window.open(ip+'/question/excel')
+      window.open(ip+'/question/excel?title='+this.searchForm.title+"&"+"point="+this.searchForm.point)
     },
     async loadData(isSearch) {
       isSearch && (this.defaultParams.page = 1);

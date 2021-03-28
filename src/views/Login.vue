@@ -36,6 +36,7 @@ export default {
         this.$message.success(res.message);
         sessionStorage.setItem("isLogin", true);
         sessionStorage.setItem("userId", res.data.id);
+        sessionStorage.setItem("role", res.data.level);
         this.$router.push("/home");
       } else this.$message.error(res.message);
     },

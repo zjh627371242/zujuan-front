@@ -26,7 +26,8 @@
             subData = {};"
           >新增试题</el-button
         >
-        <el-button
+        
+        <el-button v-if="role != 'inputPeople'"
           type="primary"
           class="add"
           plain
@@ -100,6 +101,7 @@ export default {
   components: { Info },
   data() {
     return {
+      role:'',
       isAdd:'',
       searchForm: {
 
@@ -110,6 +112,7 @@ export default {
     };
   },
   created() {
+    this.role = sessionStorage.getItem("role")
     this.loadData()
   },
   methods: {

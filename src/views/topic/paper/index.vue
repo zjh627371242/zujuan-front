@@ -27,7 +27,7 @@
       <el-table :data="tableData" style="width: 100%" border>
         <el-table-column prop="title" label="试卷标题" align="center">
         </el-table-column>
-        <el-table-column prop="createTime" label="试卷标题" align="center">
+        <el-table-column prop="createTime" label="生成时间" align="center">
           <template slot-scope="scope">
             {{ scope.row.createTime | timeFormat }}
           </template>
@@ -57,7 +57,7 @@
       </div>
     </div>
     <el-dialog
-      :title="title"
+      
       :show-close="false"
       :visible.sync="dialogVisible"
       v-if="dialogVisible"
@@ -65,6 +65,7 @@
       top="50px"
     >
       <components
+      :innerTitle = "innerTitle"
         :is="componentName"
         :subject-list="subjectList"
         :paper="paper"
@@ -87,6 +88,7 @@ export default {
   components: { Auto, Manual, Detail },
   data() {
     return {
+      innerTitle:'',
       isAdd: "",
       searchForm: {},
       subData: {},
@@ -136,7 +138,7 @@ export default {
       const res = await this.$api.paper.detail({
         paperId: row.id,
       });
-
+      this.innerTitle = row.title;
       this.paper = this.format(res.data.data.papermxList);
       this.componentName = "Detail";
       this.openDialog({ title: row.title });

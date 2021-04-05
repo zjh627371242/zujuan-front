@@ -1,14 +1,15 @@
 <template>
 <div>
-  <el-button @click="exportPdf">导出</el-button>
-  <div class="conatienr">
+  <div class="container">
     <div class="paper" id="pdfExport">
+      <h2 class="bigTitle">{{innerTitle}}</h2>
       <div class="paper-item" v-for="(item, index) in paper" :key="index">
         <h3>第{{ index + 1 }}题</h3>
         <p class="title">题型：{{ item.type }}</p>
         <p class="content">题目：{{ item.content }}</p>
       </div>
     </div>
+    <el-button @click="exportPdf" style="float:right">导出</el-button>
   </div>
 </div>
 </template>
@@ -20,6 +21,10 @@ export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
   props: {
+    innerTitle:{
+      type:String,
+      default:''
+    },
     paper: {
       type: Array,
       default: () => [],
@@ -108,10 +113,17 @@ export default {
 </script>
 <style lang="less" scoped>
 .paper {
+  padding: 10px;
   text-align: left;
 }
 .paper-item {
   margin: 10px 0;
   line-height: 25px;
+}
+.bigTitle{
+  text-align: center;
+}
+.container{
+  overflow: hidden;
 }
 </style>

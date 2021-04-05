@@ -7,11 +7,10 @@
           <span>题库管理</span>
         </template>
         <el-menu-item-group>
-          <el-menu-item index="/home/subject">科目管理</el-menu-item>
-          <el-menu-item index="/home/knowledge">知识点管理</el-menu-item>
-          <el-menu-item index="/home/questionType">题型管理</el-menu-item>
+          <el-menu-item index="/home/subject" v-if="role == 'admin'">科目管理</el-menu-item>
+          <el-menu-item index="/home/knowledge" v-if="role != 'inputPeople'">知识点管理</el-menu-item>
+          <el-menu-item index="/home/questionType" v-if="role == 'admin'">题型管理</el-menu-item>
           <el-menu-item index="/home/question">试题管理</el-menu-item>
-          <el-menu-item index="/home/paper">试卷管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">
@@ -21,8 +20,8 @@
         </template>
         <el-menu-item-group>
           <el-menu-item index="/home/user">用户管理</el-menu-item>
-          <el-menu-item index="/home/info">系统信息管理</el-menu-item>
-          <el-menu-item index="/home/notice">公告信息管理</el-menu-item>
+          <el-menu-item index="/home/info" v-if="role == 'admin'">系统信息管理</el-menu-item>
+          <el-menu-item index="/home/notice" v-if="role == 'admin'">公告信息管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="3">
@@ -47,6 +46,7 @@ export default {
   components: {},
   data() {
     return {
+      role:'',
       currentPath: "/home/subject",
     };
   },
@@ -54,10 +54,10 @@ export default {
   watch: {},
   //方法集合
   methods: {},
-  created() {},
-  mounted() {
-    this.currentPath = this.$route.fullPath
+  created() {
+    this.role = sessionStorage.getItem("role")
   },
+  mounted() {},
 };
 </script>
 <style lang="less" scoped>

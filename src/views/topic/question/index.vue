@@ -22,11 +22,15 @@
           type="primary"
           class="add"
           plain
-          @click="openDialog({ title: '新增试题' });isAdd = true;
-            subData = {};"
+          @click="
+            openDialog({ title: '新增试题' });
+            isAdd = true;
+            subData = {};
+          "
           >新增试题</el-button
         >
         <el-button
+          v-if="role != 'inputPeople'"
           type="primary"
           class="add"
           plain
@@ -37,11 +41,19 @@
     </div>
     <div class="table">
       <el-table :data="tableData" style="width: 100%" border>
-        <el-table-column prop="knowledge.subject.title" label="科目名称" align="center">
+        <el-table-column
+          prop="knowledge.subject.title"
+          label="科目名称"
+          align="center"
+        >
         </el-table-column>
         <el-table-column prop="knowledge.point" label="知识点" align="center">
         </el-table-column>
-        <el-table-column prop="questionEngine.typeName" label="题目类型" align="center">
+        <el-table-column
+          prop="questionEngine.typeName"
+          label="题目类型"
+          align="center"
+        >
         </el-table-column>
         <el-table-column prop="levelName" label="难度" align="center">
         </el-table-column>
@@ -93,28 +105,34 @@
 <script>
 import tableMixin from "@/mixins/tableMixin";
 import dialogMixin from "@/mixins/dialogMixin";
-import {ip} from "@/utils/config"
+import { ip } from "@/utils/config";
 import Info from "./info";
 export default {
   mixins: [tableMixin, dialogMixin],
   components: { Info },
   data() {
     return {
-      isAdd:'',
-      searchForm: {
-
-      },
+      isAdd: "",
+      searchForm: {},
       subData: {},
       tableData: [],
-      
+      role: "",
     };
   },
   created() {
-    this.loadData()
+    this.role = sessionStorage.getItem("role");
+    this.loadData();
   },
   methods: {
-    download(){
-      window.open(ip+'/question/excel?title='+this.searchForm.title+"&"+"point="+this.searchForm.point)
+    download() {
+      window.open(
+        ip +
+          "/question/excel?title=" +
+          this.searchForm.title +
+          "&" +
+          "point=" +
+          this.searchForm.point
+      );
     },
     async loadData(isSearch) {
       isSearch && (this.defaultParams.page = 1);

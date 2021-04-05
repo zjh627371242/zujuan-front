@@ -4,7 +4,7 @@
       <div class="paper-item" v-for="(item, index) in paper" :key="index">
         <h3>第{{ index + 1 }}题</h3>
         <p class="title">题型：{{ item.type }}</p>
-        <p class="content">题目内容：{{ item.content }}</p>
+        <p class="content">题目：{{ item.content }}</p>
       </div>
     </div>
   </div>

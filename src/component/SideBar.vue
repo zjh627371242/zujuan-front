@@ -11,6 +11,7 @@
           <el-menu-item index="/home/knowledge" v-if="role != 'inputPeople'">知识点管理</el-menu-item>
           <el-menu-item index="/home/questionType" v-if="role == 'admin'">题型管理</el-menu-item>
           <el-menu-item index="/home/question">试题管理</el-menu-item>
+          <el-menu-item index="/home/paper">试卷管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">

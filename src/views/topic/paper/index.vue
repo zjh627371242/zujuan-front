@@ -139,7 +139,7 @@ export default {
 
       this.paper = this.format(res.data.data.papermxList);
       this.componentName = "Detail";
-      this.openDialog({ title: "试卷详情" });
+      this.openDialog({ title: row.title });
     },
     async handleDelete(row) {
       this.$confirm("确认删除该试卷吗", "确认信息", {

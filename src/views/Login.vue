@@ -15,6 +15,7 @@
         >登录</el-button
       >
     </div>
+    <img src="../assets/logo_school.png" alt="" class="logo" />
   </div>
 </template>
 
@@ -56,6 +57,12 @@ export default {
   width: 100%;
   height: 100%;
   opacity: 0.8;
+  .logo {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+  }
+
   .login-form {
     /deep/.el-form-item__label {
       color: #1a334e;
